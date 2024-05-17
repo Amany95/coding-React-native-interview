@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -28,15 +28,27 @@ export const RemainingMovies: React.FC<{}> = () => {
     }),
     [],
   );
-  const onPress = () => {
-    onClick.navigate('MovieDetails');
-  };
+  const handleNavigate = useCallback(
+    (item: ITopMovie, index: number) => {
+      onClick.navigate('MovieDetails', {
+        movie: {
+          popularity: item.popularity,
+          title: item.title,
+          urlToImage: item.poster_path,
+          release_date: item.release_date,
+          overview: item.overview,
+        },
+        index: index,
+      });
+    },
+    [onClick],
+  );
   // *************************** render **********************************
   const renderItem = ({item, index}: {item: any; index: number}) => {
     return (
       <TouchableOpacity
         style={Styles.cardContainer as ViewStyle}
-        onPress={onPress}>
+        onPress={()=>handleNavigate(item, index)}>
         <FastImage
           style={Styles.imgStyle}
           source={{uri: `${ImgUrl}${item.poster_path}`}}

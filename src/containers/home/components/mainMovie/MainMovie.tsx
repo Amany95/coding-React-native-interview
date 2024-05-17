@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -40,9 +40,18 @@ export const MainMovie: React.FC<{}> = () => {
     }
   }, [movie, moviesTypesList]);
 
-  const onPress = () => {
-    onClick.navigate('MovieDetails');
-  };
+  const handleNavigate = useCallback(() => {
+    onClick.navigate('MovieDetails', {
+      movie: {
+        popularity: movie.popularity,
+        title: movie.title,
+        urlToImage: movie.poster_path,
+        release_date: movie.release_date,
+        overview: movie.overview,
+      },
+      index: 0,
+    });
+  }, [onClick]);
   // *************************** render **********************************
 
   return (
@@ -123,7 +132,7 @@ export const MainMovie: React.FC<{}> = () => {
                 size={responsiveFontSize(2)}
               />
             }
-            onPress={onPress}
+            onPress={() => handleNavigate()}
           />
           <Button
             text="Trailier"
