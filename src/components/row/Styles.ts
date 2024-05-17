@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {Colors} from '../../../../styles/Colors';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: Colors.PrimaryColor,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
