@@ -1,4 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -12,16 +18,23 @@ import {Row} from '../../../../components/row/Row';
 import {Colors} from '../../../../styles/Colors';
 import {Button} from '../../../../components/button/Button';
 import moment from 'moment';
-import {ITopMovie} from '../../../../interfaces/TopRatedList';
+import {ITopMovie, ITopMovieList} from '../../../../interfaces/TopRatedList';
 import {IGenresList} from '../../../../interfaces/GenresList';
 import {genresListMock, topRatedListMock} from '../../../../constants/MockData';
 import {ImgUrl} from '../../../../constants/Urls';
 
-export const MainMovie: React.FC<{}> = () => {
+type MainMovieProps = PropsWithChildren<{
+  moviesList: ITopMovieList;
+  genresList: IGenresList;
+}>;
+export const MainMovie: React.FC<MainMovieProps> = ({
+  moviesList,
+  genresList,
+}) => {
   const onClick = useNavigation();
-  const [movie, setMovie] = useState<ITopMovie>(topRatedListMock.results[0]);
+  const [movie, setMovie] = useState<ITopMovie>(moviesList.results[0]);
   const [moviesTypesList, setMoviesTypesList] =
-    useState<IGenresList>(genresListMock);
+    useState<IGenresList>(genresList);
   const [types, setTypes] = useState('');
 
   // *************************** useEffect **************************
