@@ -8,12 +8,15 @@ import Styles from './Styles';
 import {SearchInput} from '../../components/searchInput/SearchInput';
 import {Row} from '../../../../components/row/Row';
 import {IconTab} from '../../../../components/iconTab/IconTab';
+import {useGetGenreMoviesQuery} from '../../../../services/apis/MoviesApi';
 
 function Discover(): JSX.Element {
-  const [selectedGenre, setSelectedGenre] = useState(genresListMock.genres[0]);
+  const [selectedGenre, setSelectedGenre] = useState({id: 0, name: ''});
   const [searchText, setSearchText] = useState('');
   const [searchYear, setSearchYear] = useState('');
   const [sortBy, setSortBy] = useState(false);
+
+  const {data: genres, isLoading: isGenresLoading} = useGetGenreMoviesQuery();
 
   const changeSortBy = useCallback(() => {
     setSortBy(!sortBy);
@@ -43,6 +46,7 @@ function Discover(): JSX.Element {
       <GenresTags
         selectedGenre={selectedGenre}
         setSelectedGenre={setSelectedGenre}
+        genresList={genres}
       />
       <VerticalList />
     </SafeAreaView>

@@ -4,17 +4,18 @@ import {genresListMock} from '../../../../constants/MockData';
 import {Tag} from '../tag/Tag';
 
 import Styles from './Styles';
-import {IGenre} from '../../../../interfaces/GenresList';
+import {IGenre, IGenresList} from '../../../../interfaces/GenresList';
 
 export const GenresTags: React.FC<{
   selectedGenre: IGenre;
   setSelectedGenre: Function;
-}> = ({selectedGenre, setSelectedGenre}) => {
+  genresList: IGenresList;
+}> = ({selectedGenre, setSelectedGenre, genresList}) => {
   return (
     <FlatList
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={genresListMock.genres}
+      data={genresList.genres}
       keyExtractor={(item: IGenre) => item.id.toString()}
       renderItem={({item}: any) => (
         <Tag
