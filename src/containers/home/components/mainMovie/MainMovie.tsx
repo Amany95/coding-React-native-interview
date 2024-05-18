@@ -22,6 +22,8 @@ import {ITopMovie, ITopMovieList} from '../../../../interfaces/TopRatedList';
 import {IGenresList} from '../../../../interfaces/GenresList';
 import {genresListMock, topRatedListMock} from '../../../../constants/MockData';
 import {ImgUrl} from '../../../../constants/Urls';
+import {useGetVideoMovieQuery} from '../../../../services/apis/MoviesApi';
+import {VideoModal} from '../../../movies/components/videoModal/VideoModal';
 
 type MainMovieProps = PropsWithChildren<{
   moviesList: ITopMovieList;
@@ -36,7 +38,11 @@ export const MainMovie: React.FC<MainMovieProps> = ({
   const [moviesTypesList, setMoviesTypesList] =
     useState<IGenresList>(genresList);
   const [types, setTypes] = useState('');
-
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [videoId, setVideoId] = useState('');
+  const {data, isLoading, isFetching, refetch} = useGetVideoMovieQuery({
+    movieId: movie.id,
+  });
   // *************************** useEffect **************************
 
   useEffect(() => {
@@ -61,12 +67,23 @@ export const MainMovie: React.FC<MainMovieProps> = ({
         urlToImage: movie.poster_path,
         release_date: movie.release_date,
         overview: movie.overview,
-        id:movie.id
-
+        id: movie.id,
       },
       index: 0,
     });
   }, [onClick]);
+
+  const showTrailer = async () => {
+    const trailer = data?.results.find(
+      (video: IVideo) => video.type === 'Trailer' && video.site === 'YouTube',
+    );
+    if (trailer) {
+      setVideoId(trailer.key);
+    } else {
+      setVideoId('');
+    }
+    setModalVisible(true);
+  };
   // *************************** render **********************************
 
   return (
@@ -83,22 +100,7 @@ export const MainMovie: React.FC<MainMovieProps> = ({
           'rgba(17, 23, 32, .1)',
         ]}
         style={Styles.headerContainer}>
-        {/* <Row>
-          <IconTab iconName="align-right" iconType="feather" />
-          <TextIcon
-            text="Diamond Mall"
-            rightIcon={true}
-            iconProps={
-              <Icon
-                name="angle-down"
-                type="font-awesome"
-                color={Colors.SecondaryColor}
-                size={responsiveFontSize(2)}
-              />
-            }
-          />
-          <IconTab iconName="search" iconType="feather" />
-        </Row> */}
+
       </LinearGradient>
       <LinearGradient
         colors={[
@@ -117,7 +119,6 @@ export const MainMovie: React.FC<MainMovieProps> = ({
 
         <View style={Styles.infoMovieContainer}>
           <Text style={Styles.infoMovieText}>
-            {/* {movie?.release_date?.split('-')[0]} */}
             {moment(movie?.release_date).format('YYYY')}
           </Text>
           <Icon
@@ -159,6 +160,7 @@ export const MainMovie: React.FC<MainMovieProps> = ({
                 size={responsiveFontSize(2)}
               />
             }
+            onPress={showTrailer}
           />
           <Button
             text="Favourite"
@@ -174,6 +176,11 @@ export const MainMovie: React.FC<MainMovieProps> = ({
           />
         </Row>
       </LinearGradient>
+      <VideoModal
+        isVisible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+        videoId={videoId}
+      />
     </View>
   );
 };

@@ -33,7 +33,7 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
   const navigation = useNavigation();
 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [videoId, setVideoId] = useState(null);
+  const [videoId, setVideoId] = useState('');
 
   const {data, isLoading, isFetching, refetch} = useGetVideoMovieQuery({
     movieId: movie.id,
@@ -46,7 +46,7 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
     if (trailer) {
       setVideoId(trailer.key);
     } else {
-      setVideoId(null);
+      setVideoId('');
     }
     setModalVisible(true);
   };
