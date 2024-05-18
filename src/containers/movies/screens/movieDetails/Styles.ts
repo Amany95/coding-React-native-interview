@@ -9,7 +9,7 @@ export default StyleSheet.create({
     paddingBottom: 120,
   },
   image: {
-    height: 500,
+    height: responsiveHeight(80),
     width: '100%',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
