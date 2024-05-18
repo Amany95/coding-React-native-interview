@@ -16,7 +16,7 @@ export const GenresTags: React.FC<{
       horizontal
       showsHorizontalScrollIndicator={false}
       data={genresList.genres}
-      keyExtractor={(item: IGenre) => item.id.toString()}
+      keyExtractor={(item: IGenre) => item?.id.toString()}
       renderItem={({item}: any) => (
         <Tag
           genre={item}

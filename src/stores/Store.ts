@@ -1,7 +1,7 @@
 // src/app/store.ts
 import {configureStore} from '@reduxjs/toolkit';
 import {moviesApi} from '../services/apis/MoviesApi';
-import loggerMiddleware from './LoggerMiddleWare';
+import loggerMiddleware from './LoggerMiddleware';
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +10,5 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(moviesApi.middleware, loggerMiddleware),
 });
-
+// loggerMiddleware
 export default store;

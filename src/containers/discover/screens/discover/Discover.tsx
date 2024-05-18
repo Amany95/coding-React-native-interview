@@ -19,6 +19,8 @@ import {pageNumber} from '../../../../constants/RequestParams';
 import {ActivityIndicator} from 'react-native';
 import {Colors} from '../../../../styles/Colors';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
+import {VerticalListLoader} from '../../../../components/shimmers/VerticalListLoader';
+import { Text } from 'react-native';
 
 function Discover(): JSX.Element {
   const isFocused = useIsFocused();
@@ -35,6 +37,7 @@ function Discover(): JSX.Element {
   const [searchYear, setSearchYear] = useState(1994);
   const [sortBy, setSortBy] = useState(false);
   const [sortByValue, setSortByValue] = useState('popularity.asc');
+  const [isLoadingDiscoverList, setIsLoadingDiscoverList] = useState(true);
 
   const {data: genres, isLoading: isGenresLoading} = useGetGenreMoviesQuery();
   const {
@@ -45,17 +48,17 @@ function Discover(): JSX.Element {
   } = useGetDiscoverMoviesQuery({
     page: pageValue,
     year: searchYear,
-    sortBy: sortByValue,
+    sortBy: sortBy ? 'popularity.desc' : 'popularity.asc',
     genreId: selectedGenre?.id, // Drama genre ID
   });
   useEffect(() => {
     if (isFocused) {
       setPageValue(pageNumber);
       setSearchText('');
-      setSearchYear(null)
-      setSelectedGenre(null)
-      setSortBy(false)
-      setSortByValue('popularity.asc')
+      setSearchYear(null);
+      setSelectedGenre(null);
+      setSortBy(false);
+      setSortByValue('popularity.asc');
       refetch();
     }
   }, [isFocused]);
@@ -68,6 +71,7 @@ function Discover(): JSX.Element {
             ? listData.results
             : [...prevList.results, ...listData.results],
       }));
+      setIsLoadingDiscoverList(false)
     }
   }, [listData]);
   const handleLoadMore = () => {
@@ -86,6 +90,8 @@ function Discover(): JSX.Element {
     setSortByValue(sortBy ? 'popularity.desc' : 'popularity.asc');
     setSortBy(!sortBy);
     setPageValue(pageNumber);
+    setIsLoadingDiscoverList(true)
+
   }, [sortBy]);
 
   const changeSearchYear = useCallback(
@@ -94,6 +100,8 @@ function Discover(): JSX.Element {
       if (!isNaN(year)) {
         setSearchYear(year);
         setPageValue(pageNumber);
+        setIsLoadingDiscoverList(true)
+
       }
     },
     [searchYear],
@@ -102,6 +110,7 @@ function Discover(): JSX.Element {
     (val: IMovie) => {
       setSelectedGenre(val);
       setPageValue(pageNumber);
+      setIsLoadingDiscoverList(true)
     },
     [selectedGenre],
   );
@@ -132,26 +141,29 @@ function Discover(): JSX.Element {
         setSelectedGenre={changeGenre}
         genresList={genres}
       />
-      <View style={Styles.containerList}>
-        <FlatList
-          keyExtractor={(item: IMovie) => item.id?.toString()}
-          showsVerticalScrollIndicator={false}
-          data={list?.results}
-          renderItem={({item}: any) => <MovieItem movie={item} />}
-          // refreshControl={
-          //   <RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />
-          // }
-          style={Styles.list}
-          onEndReached={() => handleLoadMore()}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={renderFooter}
-          getItemLayout={(data, index) => ({
-            length: responsiveHeight(35),
-            offset: responsiveHeight(35) * index,
-            index,
-          })}
-        />
-      </View>
+      {isLoadingDiscoverList ? (
+        <VerticalListLoader />
+      ) : (
+
+        <View style={Styles.containerList}>
+          <FlatList
+            keyExtractor={(item: IMovie) => item.id?.toString()}
+            showsVerticalScrollIndicator={false}
+            data={list?.results}
+            renderItem={({item}: any) => <MovieItem movie={item} />}
+      
+            style={Styles.list}
+            onEndReached={() => handleLoadMore()}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={renderFooter}
+            getItemLayout={(data, index) => ({
+              length: responsiveHeight(35),
+              offset: responsiveHeight(35) * index,
+              index,
+            })}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 }

@@ -32,7 +32,7 @@ export const MainMovie: React.FC<MainMovieProps> = ({
   genresList,
 }) => {
   const onClick = useNavigation();
-  const [movie, setMovie] = useState<ITopMovie>(moviesList.results[0]);
+  const [movie, setMovie] = useState<ITopMovie>(moviesList?.results[0]);
   const [moviesTypesList, setMoviesTypesList] =
     useState<IGenresList>(genresList);
   const [types, setTypes] = useState('');
