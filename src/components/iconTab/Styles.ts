@@ -12,6 +12,7 @@ export default StyleSheet.create({
     width: responsiveWidth(10),
     justifyContent: 'center',
     borderRadius: 10,
+
     // alignItems:'center'
   },
 });

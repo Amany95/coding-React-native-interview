@@ -1,20 +1,21 @@
 import React, {PropsWithChildren} from 'react';
-import {TextStyle, View} from 'react-native';
-import Styles from './Styles';
+import {GestureResponderEvent, TextStyle, View} from 'react-native';
 import {Icon} from '@rneui/themed';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 import {Colors} from '../../styles/Colors';
+import Styles from './Styles';
 
 type IconTabProps = PropsWithChildren<{
   iconName: string;
   iconType: string;
-
+  onPress?: (event: GestureResponderEvent) => void;
   style?: TextStyle;
 }>;
 export const IconTab: React.FC<IconTabProps> = ({
   iconName,
   iconType,
   style,
+  onPress,
 }) => {
   return (
     <View>
@@ -24,6 +25,7 @@ export const IconTab: React.FC<IconTabProps> = ({
         color={Colors.SecondaryColor}
         size={responsiveFontSize(3)}
         containerStyle={[Styles.containerStyle, style]}
+        onPress={onPress}
       />
     </View>
   );
