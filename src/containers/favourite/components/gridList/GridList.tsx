@@ -69,6 +69,7 @@ export const GridList: React.FC<{}> = () => {
           urlToImage: item.poster_path,
           release_date: item.release_date,
           overview: item.overview,
+          id:item.id
         },
         index: index,
       });

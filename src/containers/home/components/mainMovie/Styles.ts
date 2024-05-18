@@ -25,11 +25,6 @@ export default StyleSheet.create({
 
     paddingTop: responsiveHeight(5),
     paddingHorizontal: responsiveWidth(4),
-
-    // justifyContent: 'flex-end',
-    // alignItems: 'flex-start',
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   titleContainer: {
     position: 'absolute',

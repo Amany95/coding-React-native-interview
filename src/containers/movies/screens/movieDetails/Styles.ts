@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
 
 export default StyleSheet.create({
   container: {
@@ -13,11 +14,21 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
   },
+  headerContainer: {
+    position: 'absolute',
+    top: 0,
+    width: '100%',
+    height: '20%',
+
+    paddingTop: responsiveHeight(5),
+    paddingHorizontal: responsiveWidth(4),
+  },
   crossContainer: {
     position: 'absolute',
     top: 60,
     left: 30,
     zIndex: 9,
+    width: responsiveWidth(85),
   },
   cross: {
     height: 34,

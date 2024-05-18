@@ -61,6 +61,8 @@ export const MainMovie: React.FC<MainMovieProps> = ({
         urlToImage: movie.poster_path,
         release_date: movie.release_date,
         overview: movie.overview,
+        id:movie.id
+
       },
       index: 0,
     });

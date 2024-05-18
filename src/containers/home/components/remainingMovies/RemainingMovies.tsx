@@ -40,6 +40,8 @@ export const RemainingMovies: React.FC<RemainingMoviesProps> = ({
           urlToImage: item.poster_path,
           release_date: item.release_date,
           overview: item.overview,
+          id:item.id
+
         },
         index: index,
       });

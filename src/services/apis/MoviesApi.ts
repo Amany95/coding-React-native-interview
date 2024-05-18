@@ -55,6 +55,12 @@ export const moviesApi = createApi({
         },
       }),
     }),
+    getVideoMovie: builder.query<any, {movieId: number}>({
+      query: ({movieId}) => ({
+        url: `/movie/${movieId}/videos`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -63,5 +69,6 @@ export const {
   useGetGenreMoviesQuery,
   useGetFavouriteMoviesQuery,
   useGetDiscoverMoviesQuery,
-  useGetSearchMoviesQuery
+  useGetSearchMoviesQuery,
+  useGetVideoMovieQuery,
 } = moviesApi;

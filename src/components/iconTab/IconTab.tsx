@@ -10,20 +10,24 @@ type IconTabProps = PropsWithChildren<{
   iconType: string;
   onPress?: (event: GestureResponderEvent) => void;
   style?: TextStyle;
+  color?: string;
+  size?: string;
 }>;
 export const IconTab: React.FC<IconTabProps> = ({
   iconName,
   iconType,
   style,
   onPress,
+  color = Colors.SecondaryColor,
+  size = responsiveFontSize(3),
 }) => {
   return (
     <View>
       <Icon
         name={iconName}
         type={iconType}
-        color={Colors.SecondaryColor}
-        size={responsiveFontSize(3)}
+        color={color}
+        size={size}
         containerStyle={[Styles.containerStyle, style]}
         onPress={onPress}
       />
