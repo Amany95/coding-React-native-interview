@@ -41,6 +41,20 @@ export const moviesApi = createApi({
         },
       }),
     }),
+    getSearchMovies: builder.query<
+      any,
+      {page: number; year: number; searchedText: string}
+    >({
+      query: ({page, year, searchedText}) => ({
+        url: '/search/movie',
+        method: 'GET',
+        params: {
+          page: page,
+          primary_release_year: year,
+          query: searchedText,
+        },
+      }),
+    }),
   }),
 });
 
@@ -49,4 +63,5 @@ export const {
   useGetGenreMoviesQuery,
   useGetFavouriteMoviesQuery,
   useGetDiscoverMoviesQuery,
+  useGetSearchMoviesQuery
 } = moviesApi;
