@@ -1,13 +1,27 @@
-import React from 'react';
-import {View, TouchableOpacity, Text, Dimensions} from 'react-native';
+import React, {PropsWithChildren} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+  GestureResponderEvent,
+} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import Modal from 'react-native-modal';
 
 import {Icon} from '@rneui/themed';
 
 import Styles from './Styles';
-
-export const VideoModal = ({isVisible, onClose, videoId}) => {
+type VideoModalProps = PropsWithChildren<{
+  isVisible: boolean;
+  videoId: string;
+  onClose?: (event: GestureResponderEvent) => void;
+}>;
+export const VideoModal: React.FC<VideoModalProps> = ({
+  isVisible,
+  onClose,
+  videoId,
+}) => {
   return (
     <Modal
       isVisible={isVisible}
