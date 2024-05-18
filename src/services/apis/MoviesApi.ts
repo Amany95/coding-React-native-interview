@@ -26,6 +26,21 @@ export const moviesApi = createApi({
         params: {page},
       }),
     }),
+    getDiscoverMovies: builder.query<
+      any,
+      {page: number; year: number; sortBy: string; genreId: number | null}
+    >({
+      query: ({page, year, sortBy, genreId}) => ({
+        url: '/discover/movie',
+        method: 'GET',
+        params: {
+          page: page,
+          primary_release_year: year,
+          sort_by: sortBy,
+          with_genres: genreId,
+        },
+      }),
+    }),
   }),
 });
 
@@ -33,4 +48,5 @@ export const {
   useGetTopRatedMoviesQuery,
   useGetGenreMoviesQuery,
   useGetFavouriteMoviesQuery,
+  useGetDiscoverMoviesQuery,
 } = moviesApi;

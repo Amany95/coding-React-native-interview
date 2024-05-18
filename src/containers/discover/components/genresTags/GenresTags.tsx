@@ -7,7 +7,7 @@ import Styles from './Styles';
 import {IGenre, IGenresList} from '../../../../interfaces/GenresList';
 
 export const GenresTags: React.FC<{
-  selectedGenre: IGenre;
+  selectedGenre: IGenre ;
   setSelectedGenre: Function;
   genresList: IGenresList;
 }> = ({selectedGenre, setSelectedGenre, genresList}) => {

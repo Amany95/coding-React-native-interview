@@ -3,7 +3,7 @@ import {TextInput, TextStyle} from 'react-native';
 import Styles from './Styles';
 
 export const SearchInput: React.FC<{
-  searchText: string;
+  searchText: string | number;
   setSearchText: Function;
   containerStyle?: TextStyle;
   placeHolder: string;

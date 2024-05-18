@@ -1,7 +1,7 @@
 import React from 'react';
 import {Platform, StatusBar, StyleSheet} from 'react-native';
 import {Colors} from '../../../../styles/Colors';
-import {responsiveWidth} from 'react-native-responsive-dimensions';
+import {responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
 
 export default StyleSheet.create({
   container: {
@@ -17,5 +17,16 @@ export default StyleSheet.create({
   },
   year: {
     width: responsiveWidth(25),
+  },
+  containerList: {
+    flex: 1,
+    flexGrow: 1,
+    paddingTop: responsiveHeight(2),
+    backgroundColor: Colors.PrimaryColor,
+  },
+  list: {
+    flex: 1,
+    flexGrow: 1,
+    paddingVertical: 8,
   },
 });
