@@ -1,75 +1,65 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Text, FlatList, ViewStyle, TouchableOpacity} from 'react-native';
-
-import Styles from './Styles';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  ViewStyle,
+  TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {useDispatch, useSelector} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
-
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   IFavouriteMovie,
   IFavouriteMovieList,
 } from '../../../../interfaces/FavouriteList';
-import {
-  favouriteListMock,
-  genresListMock,
-} from '../../../../constants/MockData';
+import {genresListMock} from '../../../../constants/MockData';
 import {ImgUrl} from '../../../../constants/Urls';
+import Styles from './Styles';
+import {pageNumber} from '../../../../constants/RequestParams';
+import {useGetFavouriteMoviesQuery} from '../../../../services/apis/MoviesApi';
+import {Colors} from '../../../../styles/Colors';
+
 export const GridList: React.FC<{}> = () => {
-  const dispatch = useDispatch();
+  const onClick = useNavigation();
   const isFocused = useIsFocused();
 
-  const onClick = useNavigation();
+  const [pageValue, setPageValue] = useState<number>(pageNumber);
+  const [list, setList] = useState<IFavouriteMovieList>({
+    page: pageNumber,
+    results: [],
+    total_pages: 0,
+    total_results: 0,
+  });
 
-  const [loading, setLoading] = useState(true);
-  // const [page, setPage] = useState(PageNumber);
-  const [scrollFlag, setScrollFlag] = useState(false);
+  const {data, isLoading, isFetching, refetch} = useGetFavouriteMoviesQuery(
+    {page: pageValue},
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
-  const [list, setList] = useState<IFavouriteMovieList>(favouriteListMock);
+  useEffect(() => {
+    if (isFocused) {
+      setPageValue(pageNumber);
+      refetch();
+    }
+  }, [isFocused]);
 
-  // *************************** useEffect **************************
+  useEffect(() => {
+    if (data) {
+      setList(prevList => ({
+        ...data,
+        results:
+          pageNumber == pageValue
+            ? data.results
+            : [...prevList.results, ...data.results],
+      }));
+    }
+  }, [data]);
 
-  // useEffect(() => {
-  //   getAllMoviessList();
-  // }, [page,isFocused]);
-
-  // const getAllMoviessList = () => {
-  //   dispatch(
-  //     getAllMoviesListRequest({
-  //       data: {page: page},
-  //       onSuccess: val => {
-  //         if (scrollFlag) {
-  //           setList(prevListData => ({
-  //             ...prevListData,
-  //             page: val.page,
-  //             total_pages: val.total_pages,
-  //             total_results: val.total_results,
-  //             results: [...prevListData.results, ...val.results],
-  //           }));
-  //         } else {
-  //           setList(val);
-  //         }
-  //         setScrollFlag(false);
-  //         setLoading(false);
-  //       },
-  //       onError: val => {
-  //         setLoading(false);
-  //         setList([]);
-  //       },
-  //     }),
-  //   );
-  // };
-  // const ListFooterComponent = () => {
-  //   return scrollFlag ? <LoadingIndicator /> : null;
-  // };
-  // const onEndReached = () => {
-  //   if (page < list.total_pages && !scrollFlag) {
-  //     let p = page + 1;
-  //     setPage(p);
-  //     setScrollFlag(true);
-  //   }
-  // };
   const handleNavigate = useCallback(
     (item: IFavouriteMovie, index: number) => {
       onClick.navigate('MovieDetails', {
@@ -85,22 +75,25 @@ export const GridList: React.FC<{}> = () => {
     },
     [onClick],
   );
-  // *************************** render **********************************
-  const renderItem = ({item, index}: {item: any; index: number}) => {
-    let arr;
-    if (genresListMock?.genres?.length > 0) {
-      arr = item?.genre_ids.map((genreId: number) => {
+
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: IFavouriteMovie;
+    index: number;
+  }) => {
+    const genres = item?.genre_ids
+      .map((genreId: number) => {
         const genre = genresListMock?.genres.find(
           genreItem => genreItem.id === genreId,
         );
         return genre ? genre.name : '';
-      });
-    }
+      })
+      .join(', ');
+
     return (
-      <TouchableOpacity
-        onPress={() => {
-          handleNavigate(item, index);
-        }}>
+      <TouchableOpacity onPress={() => handleNavigate(item, index)}>
         <View style={Styles.cardContainer as ViewStyle}>
           <FastImage
             style={Styles.imgStyle}
@@ -119,28 +112,41 @@ export const GridList: React.FC<{}> = () => {
               {item?.title}
             </Text>
             <Text style={Styles.typeText} numberOfLines={1}>
-              {arr?.join(', ')}
-              {/* {moment(item?.release_date).format('HH:MM DD, MMMM')} */}
+              {genres}
             </Text>
           </LinearGradient>
         </View>
       </TouchableOpacity>
     );
   };
+
+  const handleLoadMore = () => {
+    if (!isFetching &&pageValue < data?.total_pages) {
+      setPageValue(prevPage => prevPage + 1);
+    }
+  };
+  const renderFooter = () => {
+    if (!isFetching) {
+      return null;
+    }
+    return <ActivityIndicator size="small" color={Colors.InactiveColor} />;
+  };
+
   return (
     <View style={Styles.container}>
-      {/* {loading ? (
-        <LoadingIndicator />
-      ) : ( */}
-      <FlatList
-        numColumns={2}
-        data={list?.results}
-        renderItem={renderItem}
-        keyExtractor={(item: any) => item.id.toString()}
-        // onEndReached={onEndReached}
-        // ListFooterComponent={ListFooterComponent()}
-      />
-      {/* )} */}
+      {isLoading && pageValue === pageNumber ? (
+        <ActivityIndicator size="large" color={Colors.InactiveColor} />
+      ) : (
+        <FlatList
+          numColumns={2}
+          data={list.results}
+          renderItem={renderItem}
+          keyExtractor={(item: IFavouriteMovie) => item.id.toString()}
+          onEndReached={() => handleLoadMore()}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter}
+        />
+      )}
     </View>
   );
 };
