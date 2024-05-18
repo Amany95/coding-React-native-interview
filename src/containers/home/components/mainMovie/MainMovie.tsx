@@ -158,7 +158,18 @@ export const MainMovie: React.FC<MainMovieProps> = ({
               />
             }
           />
-          <Button text="ENTRADS" colors={['#ed5755', '#e44745', '#d2363b']} />
+          <Button
+            text="Favourite"
+            iconProps={
+              <Icon
+                name="favorite-border" //favorite
+                type="material"
+                color={Colors.SecondaryColor}
+                size={responsiveFontSize(2)}
+              />
+            }
+            colors={['#ed5755', '#e44745', '#d2363b']}
+          />
         </Row>
       </LinearGradient>
     </View>

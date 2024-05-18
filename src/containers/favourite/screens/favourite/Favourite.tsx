@@ -1,8 +1,8 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {GridList} from '../../components/gridList/GridList';
 
 function Favourite(): JSX.Element {
-  return <Text>Favourite Screen</Text>;
+  return <GridList />;
 }
 
 export {Favourite};
