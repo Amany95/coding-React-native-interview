@@ -17,6 +17,7 @@ const linking = {
           Favourite: 'favourite',
         },
       },
+      MovieDetails: 'movieDetails/:id',
     },
   },
 };
