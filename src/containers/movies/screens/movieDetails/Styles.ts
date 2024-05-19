@@ -55,23 +55,28 @@ export default StyleSheet.create({
     lineHeight: 22,
     paddingHorizontal: 24,
   },
-  readMoreContainer: {
-    position: 'absolute',
-    paddingTop: 14,
-    paddingBottom: 28,
-    paddingHorizontal: 24,
-    bottom: 0,
-    width: '100%',
+  card: {
+    width: responsiveWidth(80),
+    marginHorizontal: responsiveWidth(10),
+    padding: 16,
+    borderRadius: 8,
   },
-  readMoreText: {
-    fontSize: 13,
-    fontWeight: '300',
-    lineHeight: 22,
+  titleCard: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 8,
   },
-  link: {
-    color: '#00beff',
-    textDecorationLine: 'underline',
-    textDecorationStyle: 'solid',
-    textDecorationColor: '#00beff',
+  weatherInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  temp: {
+    fontSize: 24,
+    marginLeft: 8,
+  },
+  description: {
+    fontSize: 16,
+    color: '#757575',
   },
 });

@@ -1,10 +1,16 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {ActivityIndicator, Linking, ScrollView, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Linking,
+  ScrollView,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 import FastImage from 'react-native-fast-image';
-import {Icon} from '@rneui/themed';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {Card, Icon, Text as RNEText} from '@rneui/themed';
 import {IVideo} from '../../../../interfaces/VideoList';
 import {Colors} from '../../../../styles/Colors';
 import {ImgUrl} from '../../../../constants/Urls';
@@ -14,12 +20,10 @@ import {
   useGetVideoMovieQuery,
 } from '../../../../services/apis/MoviesApi';
 import {Row} from '../../../../components/row/Row';
-import LinearGradient from 'react-native-linear-gradient';
-import {Button} from '../../../../components/button/Button';
-import Styles from './Styles';
 import {IMovieDetails} from '../../../../interfaces/MovieDetails';
 import {initialMovieDetails} from '../../../../constants/IntialData';
-import {TouchableOpacity} from 'react-native';
+import {useGetWeatherMovieQuery} from '../../../../services/apis/WeatherApi';
+import Styles from './Styles';
 
 interface Route {
   params: {
@@ -32,6 +36,8 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [videoId, setVideoId] = useState('');
+  const [movieLocation, setMovieLocation] = useState('');
+
   const [movieDetails, setMovieDetails] =
     useState<IMovieDetails>(initialMovieDetails);
 
@@ -43,6 +49,10 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
   } = useGetMovieDetailsQuery({
     movieId: id,
   });
+  const {data: weatherData, isLoading: isWeatherLoading} =
+    useGetWeatherMovieQuery({
+      location: movieLocation,
+    });
   const {data, isLoading, isFetching} = useGetVideoMovieQuery({
     movieId: id,
   });
@@ -50,8 +60,10 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
   useEffect(() => {
     if (movieData) {
       setMovieDetails(movieData);
+      setMovieLocation(movieData?.production_countries[0]?.name)
     }
   }, [movieData]);
+
   const showTrailer = async () => {
     const trailer = data?.results.find(
       (video: IVideo) => video.type === 'Trailer' && video.site === 'YouTube',
@@ -103,12 +115,28 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
 
           <Text style={[Styles.content]}>{movieDetails?.overview}</Text>
 
+          {weatherData && (
+            <Card containerStyle={Styles.card}>
+              <Card.Title style={Styles.titleCard}>
+                {weatherData?.name}
+              </Card.Title>
+              <Card.Divider />
+              <View style={Styles.weatherInfo}>
+                <Icon name="sunny" type="ionicon" size={24} color="#FFA726" />
+                <RNEText style={Styles.temp}>
+                  {weatherData?.main.temp} °C
+                </RNEText>
+              </View>
+              <Text style={Styles.description}>
+                {weatherData?.weather[0]?.description}
+              </Text>
+            </Card>
+          )}
           <VideoModal
             isVisible={isModalVisible}
             onClose={() => setModalVisible(false)}
             videoId={videoId}
           />
-
         </ScrollView>
       </>
     );
