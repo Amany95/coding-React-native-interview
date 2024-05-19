@@ -76,7 +76,12 @@ export const MovieDetails: React.FC<{route: Route}> = ({route}) => {
     setModalVisible(true);
   };
   const goBack = useCallback(() => {
-    navigation.goBack();
+    // navigation.goBack();
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate('BottomTabs', { screen: 'Home' }); 
+    }
   }, [navigation]);
 
   const renderMovieDetails = () => {
