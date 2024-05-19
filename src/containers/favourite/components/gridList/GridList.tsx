@@ -63,15 +63,7 @@ export const GridList: React.FC<{}> = () => {
   const handleNavigate = useCallback(
     (item: IFavouriteMovie, index: number) => {
       onClick.navigate('MovieDetails', {
-        movie: {
-          popularity: item.popularity,
-          title: item.title,
-          urlToImage: item.poster_path,
-          release_date: item.release_date,
-          overview: item.overview,
-          id:item.id
-        },
-        index: index,
+        id: item.id,
       });
     },
     [onClick],
@@ -122,7 +114,7 @@ export const GridList: React.FC<{}> = () => {
   };
 
   const handleLoadMore = () => {
-    if (!isFetching &&pageValue < data?.total_pages) {
+    if (!isFetching && pageValue < data?.total_pages) {
       setPageValue(prevPage => prevPage + 1);
     }
   };

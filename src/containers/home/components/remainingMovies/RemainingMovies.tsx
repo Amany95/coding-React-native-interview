@@ -32,18 +32,9 @@ export const RemainingMovies: React.FC<RemainingMoviesProps> = ({
     [],
   );
   const handleNavigate = useCallback(
-    (item: ITopMovie, index: number) => {
+    (item: ITopMovie) => {
       onClick.navigate('MovieDetails', {
-        movie: {
-          popularity: item.popularity,
-          title: item.title,
-          urlToImage: item.poster_path,
-          release_date: item.release_date,
-          overview: item.overview,
-          id:item.id
-
-        },
-        index: index,
+        id: item.id,
       });
     },
     [onClick],
@@ -53,7 +44,7 @@ export const RemainingMovies: React.FC<RemainingMoviesProps> = ({
     return (
       <TouchableOpacity
         style={Styles.cardContainer as ViewStyle}
-        onPress={() => handleNavigate(item, index)}>
+        onPress={() => handleNavigate(item)}>
         <FastImage
           style={Styles.imgStyle}
           source={{uri: `${ImgUrl}${item.poster_path}`}}

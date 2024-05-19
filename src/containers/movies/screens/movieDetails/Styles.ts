@@ -1,5 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {responsiveHeight, responsiveWidth} from 'react-native-responsive-dimensions';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 
 export default StyleSheet.create({
   container: {
@@ -9,7 +13,7 @@ export default StyleSheet.create({
     paddingBottom: 120,
   },
   image: {
-    height: responsiveHeight(80),
+    height: responsiveHeight(60),
     width: '100%',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
@@ -25,8 +29,8 @@ export default StyleSheet.create({
   },
   crossContainer: {
     position: 'absolute',
-    top: 60,
-    left: 30,
+    top: responsiveHeight(5),
+    left: responsiveWidth(2),
     zIndex: 9,
     width: responsiveWidth(85),
   },
@@ -34,12 +38,16 @@ export default StyleSheet.create({
     height: 34,
     width: 34,
   },
+  rowStyle: {
+    marginHorizontal: responsiveWidth(4.5),
+    marginVertical: responsiveHeight(1),
+    flex: 1,
+  },
   title: {
-    fontSize: 24,
+    fontSize: responsiveFontSize(2.5),
     fontWeight: '600',
     lineHeight: 30,
-    paddingHorizontal: 24,
-    marginVertical: 18,
+    flex: 0.9,
   },
   content: {
     fontSize: 16,

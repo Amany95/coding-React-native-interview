@@ -14,14 +14,8 @@ export const MovieItem: React.FC<{
 
   const handleNavigate = useCallback(() => {
     onClick.navigate('MovieDetails', {
-      movie: {
-        popularity: movie.popularity,
-        title: movie.title,
-        urlToImage: movie.poster_path,
-        release_date: movie.release_date,
-        overview: movie.overview,
-      },
-      index: 0,
+
+      id:movie.id
     });
   }, [onClick, movie]);
   return (
